@@ -2,7 +2,7 @@
 
 import jenkins
 
-server = jenkins.Jenkins('http://10.63.17.12:8090/jenkins', username='admin', password='admin123')
+server = jenkins.Jenkins('http://10.63.17.12:8090/', username='admin', password='admin')
 user = server.get_whoami()
 
 #查看Jenkins版本
