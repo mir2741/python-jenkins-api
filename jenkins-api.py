@@ -16,24 +16,32 @@ for job in jobs:
 
 #创建基本的job
 #server.create_job('myjob2',jenkins.EMPTY_CONFIG_XML)
-print server.get_job_config("myjob2")
+print (server.get_job_config("myjob2"))
 
 
 #xml模板创建job,
 config_xml="""
 <project>
   <actions/>
-  <description></description>
+  <description/>
   <keepDependencies>false</keepDependencies>
   <properties>
-    <jenkins.model.BuildDiscarderProperty>
-      <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>4</daysToKeep>
-        <numToKeep>6</numToKeep>
-        <artifactDaysToKeep>-1</artifactDaysToKeep>
-        <artifactNumToKeep>-1</artifactNumToKeep>
-      </strategy>
-    </jenkins.model.BuildDiscarderProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>appname</name>
+          <description/>
+          <defaultValue/>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>version</name>
+          <description/>
+          <defaultValue/>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <canRoam>true</canRoam>
@@ -42,11 +50,18 @@ config_xml="""
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <builders/>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>cd /opt/tomcat8 
+#docker build -t "127.0.0.1/myproject/centos7/${appname}:${version}" .
+#docker push 127.0.0.1/myproject/centos7/${appname}:${version}
+sleep 60</command>
+    </hudson.tasks.Shell>
+  </builders>
   <publishers/>
   <buildWrappers/>
-</project>
+  </project>
 """
 
 server.create_job('myjob3',config_xml)
-print server.get_job_config("myjob3")
+print (server.get_job_config("myjob3"))
